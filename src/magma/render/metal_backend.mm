@@ -426,7 +426,9 @@ public:
   }
 
 private:
-  // Textures that the CPU writes. Without unified memory they need a copy on each side.
+  // Textures that the CPU writes. Without unified memory they need a copy on each side. Only an
+  // Intel Mac's discrete GPU lacks it, and the macOS 27 SDK deprecates managed storage, so an arm64
+  // build always uses shared storage.
   [[nodiscard]] auto texture_descriptor(MTLPixelFormat format, int width, int height) const
       -> MTLTextureDescriptor * {
     auto *const descriptor =
@@ -435,8 +437,12 @@ private:
                                                           height:static_cast<NSUInteger>(height)
                                                        mipmapped:NO];
     descriptor.usage = MTLTextureUsageShaderRead;
+#if defined(__x86_64__)
     descriptor.storageMode =
         device_.hasUnifiedMemory ? MTLStorageModeShared : MTLStorageModeManaged;
+#else
+    descriptor.storageMode = MTLStorageModeShared;
+#endif
     return descriptor;
   }
 
