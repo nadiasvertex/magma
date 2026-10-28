@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.25)
-project(magma VERSION 0.7.2 DESCRIPTION "Windows, input and rendering for Basalt applications"
+project(magma VERSION 0.7.3 DESCRIPTION "Windows, input and rendering for Basalt applications"
   LANGUAGES CXX)
 
 option(MAGMA_BUILD_TESTS "Build the Catch2 test suite" ${PROJECT_IS_TOP_LEVEL})
